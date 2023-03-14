@@ -18,11 +18,11 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String seller_name;
-    private String tax_id;
+    private String sellerName;
+    private String taxId;
     private String phone;
     private String email;
-    private String account_number;
-    private String bank_details;
-    private Timestamp created_at;
+    private String accountNumber;
+    private String bankDetails;
+    private Timestamp createdAt;
 }

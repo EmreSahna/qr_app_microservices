@@ -13,8 +13,8 @@ public class SellerTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String buyer_id;
-    private String purchase_item_id;
+    private String buyerId;
+    private String purchaseItemId;
     private BigDecimal amount;
-    private Timestamp created_at;
+    private Timestamp createdAt;
 }

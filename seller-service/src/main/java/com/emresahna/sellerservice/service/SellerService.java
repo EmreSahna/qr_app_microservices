@@ -6,22 +6,17 @@ import com.emresahna.sellerservice.repository.SellerRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SellerService {
-    private final SellerRepository sellerRepository;
-
-    public SellerService(SellerRepository sellerRepository) {
-        this.sellerRepository = sellerRepository;
-    }
+public record SellerService(SellerRepository sellerRepository) {
 
     public SellerResponse getSeller(String id) {
         return sellerRepository.findById(id)
                 .map(seller -> SellerResponse.builder()
-                        .seller_name(seller.getSeller_name())
-                        .tax_id(seller.getTax_id())
+                        .seller_name(seller.getSellerName())
+                        .tax_id(seller.getTaxId())
                         .phone(seller.getPhone())
                         .email(seller.getEmail())
-                        .account_number(seller.getAccount_number())
-                        .bank_details(seller.getBank_details())
+                        .account_number(seller.getAccountNumber())
+                        .bank_details(seller.getBankDetails())
                         .build())
                 .orElseThrow(() -> new SellerNotFoundException("Seller not found"));
     }

@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import java.sql.Timestamp;
+
 @SpringBootApplication
 public class SellerServiceApplication {
 
@@ -24,12 +26,13 @@ public class SellerServiceApplication {
 	CommandLineRunner commandLineRunner() {
 		return args -> {
 			Seller seller = Seller.builder()
-					.seller_name("Emre Sahna")
-					.tax_id("1234567890")
+					.sellerName("Emre Sahna")
+					.taxId("1234567890")
 					.phone("1234567890")
 					.email("emre.sahna@hotmail.com")
-					.account_number("1234567890")
-					.bank_details("1234567890")
+					.accountNumber("1234567890")
+					.bankDetails("1234567890")
+					.createdAt(new Timestamp(System.currentTimeMillis()))
 					.build();
 			sellerRepository.save(seller);
 		};

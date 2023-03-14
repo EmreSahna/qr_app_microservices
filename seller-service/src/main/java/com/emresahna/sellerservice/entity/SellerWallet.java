@@ -12,6 +12,6 @@ public class SellerWallet {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String seller_id;
+    private String sellerId;
     private BigDecimal balance;
 }

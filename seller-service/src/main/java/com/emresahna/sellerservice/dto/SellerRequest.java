@@ -1,10 +1,8 @@
 package com.emresahna.sellerservice.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 public class SellerRequest {
     private String seller_name;
     private String tax_id;

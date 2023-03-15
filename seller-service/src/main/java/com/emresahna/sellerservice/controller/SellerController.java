@@ -1,6 +1,7 @@
 package com.emresahna.sellerservice.controller;
 
-import com.emresahna.sellerservice.dto.SellerResponse;
+import com.emresahna.sellerservice.dto.SellerRequest;
+import com.emresahna.sellerservice.entity.Seller;
 import com.emresahna.sellerservice.service.SellerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +15,8 @@ public class SellerController {
         this.sellerService = sellerService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SellerResponse> getSeller(@PathVariable String id) {
-        return ResponseEntity.ok(sellerService.getSeller(id));
+    @PostMapping("/create")
+    public ResponseEntity<Seller> createSeller(@RequestBody SellerRequest seller) {
+        return ResponseEntity.ok(sellerService.createSeller(seller));
     }
 }

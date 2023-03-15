@@ -1,6 +1,6 @@
 package com.emresahna.customerservice.controller;
 
-import com.emresahna.customerservice.dto.AddBalanceRequest;
+import com.emresahna.customerservice.dto.BalanceRequest;
 import com.emresahna.customerservice.dto.CustomerWalletRequest;
 import com.emresahna.customerservice.entity.CustomerWallet;
 import com.emresahna.customerservice.service.CustomerWalletService;
@@ -22,7 +22,7 @@ public class CustomerWalletController {
     }
 
     @PostMapping("/add-balance")
-    public ResponseEntity<CustomerWallet> addBalance(@RequestBody AddBalanceRequest addBalanceRequest) {
-        return ResponseEntity.ok(customerWalletService.addBalance(addBalanceRequest));
+    public ResponseEntity<CustomerWallet> addBalance(@RequestBody BalanceRequest balanceRequest) {
+        return ResponseEntity.ok(customerWalletService.addBalance(balanceRequest));
     }
 }

@@ -1,7 +1,10 @@
 package com.emresahna.customerservice.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -9,6 +12,9 @@ import java.sql.Timestamp;
 @Entity
 @Data
 @Table(name = "customer_transaction")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

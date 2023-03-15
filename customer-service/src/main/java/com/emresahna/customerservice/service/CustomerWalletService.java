@@ -1,6 +1,6 @@
 package com.emresahna.customerservice.service;
 
-import com.emresahna.customerservice.dto.AddBalanceRequest;
+import com.emresahna.customerservice.dto.BalanceRequest;
 import com.emresahna.customerservice.dto.CustomerWalletRequest;
 import com.emresahna.customerservice.entity.CustomerWallet;
 import com.emresahna.customerservice.repository.CustomerWalletRepository;
@@ -18,9 +18,15 @@ public record CustomerWalletService(CustomerWalletRepository customerWalletRepos
                 .build());
     }
 
-    public CustomerWallet addBalance(AddBalanceRequest addBalanceRequest) {
-        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(addBalanceRequest.getCustomerId());
-        customerWallet.setBalance(customerWallet.getBalance().add(addBalanceRequest.getAmount()));
+    public CustomerWallet addBalance(BalanceRequest balanceRequest) {
+        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId());
+        customerWallet.setBalance(customerWallet.getBalance().add(balanceRequest.getAmount()));
+        return customerWalletRepository.save(customerWallet);
+    }
+
+    public CustomerWallet decrementBalance(BalanceRequest balanceRequest) {
+        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId());
+        customerWallet.setBalance(customerWallet.getBalance().subtract(balanceRequest.getAmount()));
         return customerWalletRepository.save(customerWallet);
     }
 }

@@ -1,9 +1,11 @@
 package com.emresahna.sellerservice.service;
 
 import com.emresahna.sellerservice.dto.BalanceRequest;
-import com.emresahna.sellerservice.dto.SellerWalletRequest;
+import com.emresahna.sellerservice.dto.GeneratedQRCodeResponse;
+import com.emresahna.sellerservice.dto.SellerIdRequest;
 import com.emresahna.sellerservice.entity.SellerWallet;
 import com.emresahna.sellerservice.repository.SellerWalletRepository;
+import com.emresahna.sellerservice.util.GenerateQRCode;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -11,9 +13,9 @@ import java.math.BigDecimal;
 @Service
 public record SellerWalletService(SellerWalletRepository sellerWalletRepository) {
 
-    public SellerWallet createSellerWallet(SellerWalletRequest sellerWalletRequest) {
+    public SellerWallet createSellerWallet(SellerIdRequest sellerIdRequest) {
         return sellerWalletRepository.save(SellerWallet.builder()
-                .sellerId(sellerWalletRequest.getSeller_id())
+                .sellerId(sellerIdRequest.getSeller_id())
                 .balance(BigDecimal.valueOf(0.0))
                 .build());
     }
@@ -28,5 +30,12 @@ public record SellerWalletService(SellerWalletRepository sellerWalletRepository)
         SellerWallet sellerWallet = sellerWalletRepository.findBySellerId(balanceRequest.getId());
         sellerWallet.setBalance(sellerWallet.getBalance().add(balanceRequest.getAmount()));
         return sellerWalletRepository.save(sellerWallet);
+    }
+
+    public GeneratedQRCodeResponse generateQrCode(SellerIdRequest sellerIdRequest) {
+        String path = GenerateQRCode.generateQRCode(sellerIdRequest);
+        return GeneratedQRCodeResponse.builder()
+                .path(path)
+                .build();
     }
 }

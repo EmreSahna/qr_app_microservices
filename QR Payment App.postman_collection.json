@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "27bf3550-2b02-4ed3-94ae-859e88b24471",
+		"name": "QR Payment App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18820836"
+	},
+	"item": [
+		{
+			"name": "Add Balance To Customer",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"64b6d5b3-3287-476f-ac42-a22ba45e30b1\",\r\n    \"amount\":130\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8889/customer-wallet/add-balance",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"customer-wallet",
+						"add-balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_name\":\"Isaac\",\r\n    \"phone\":\"12435612\",\r\n    \"email\":\"isaac@hotmail.com\",\r\n    \"bank_details\":\"1234567\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8889/customer/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"customer",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Do Payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"customer_id\":\"64b6d5b3-3287-476f-ac42-a22ba45e30b1\",\r\n    \"seller_id\":\"cb36e138-edc3-457a-a8b9-7310f4e2b951\",\r\n    \"purchased_item_id\":\"domatest_01\",\r\n    \"amount\":50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8889/customer-transaction/pay",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"customer-transaction",
+						"pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate QR",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"seller_id\":\"483f6142-7f3f-418d-ac5f-a3b0fd9a03f2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8889/seller-wallet/generate-qr-code",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"seller-wallet",
+						"generate-qr-code"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

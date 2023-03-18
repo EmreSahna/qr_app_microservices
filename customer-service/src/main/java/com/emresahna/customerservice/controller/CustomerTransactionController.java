@@ -3,10 +3,8 @@ package com.emresahna.customerservice.controller;
 import com.emresahna.customerservice.dto.CustomerTransactionRequest;
 import com.emresahna.customerservice.service.CustomerTransactionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/customer-transaction")
@@ -15,6 +13,11 @@ public class CustomerTransactionController {
 
     public CustomerTransactionController(CustomerTransactionService customerTransactionService) {
         this.customerTransactionService = customerTransactionService;
+    }
+
+    @PostMapping("/read-qr")
+    public ResponseEntity<String> readQr(@RequestParam("qrCode") MultipartFile qrPhoto) {
+        return ResponseEntity.ok(customerTransactionService.readQr(qrCode));
     }
 
     @PostMapping("/pay")

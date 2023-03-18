@@ -1,6 +1,7 @@
 package com.emresahna.customerservice.controller;
 
 import com.emresahna.customerservice.dto.CustomerTransactionRequest;
+import com.emresahna.customerservice.dto.SellerIdResponse;
 import com.emresahna.customerservice.service.CustomerTransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,8 @@ public class CustomerTransactionController {
     }
 
     @PostMapping("/read-qr")
-    public ResponseEntity<String> readQr(@RequestParam("qrCode") MultipartFile qrPhoto) {
-        return ResponseEntity.ok(customerTransactionService.readQr(qrCode));
+    public ResponseEntity<SellerIdResponse> readQr(@RequestParam("qrCode") MultipartFile qrPhoto) {
+        return ResponseEntity.ok(customerTransactionService.getDataFormQRCode(qrPhoto));
     }
 
     @PostMapping("/pay")

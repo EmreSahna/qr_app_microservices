@@ -1,6 +1,7 @@
 package com.emresahna.sellerservice.controller;
 
-import com.emresahna.sellerservice.dto.SellerRequest;
+import com.emresahna.sellerservice.dto.LoginSeller;
+import com.emresahna.sellerservice.dto.RegisterSeller;
 import com.emresahna.sellerservice.entity.Seller;
 import com.emresahna.sellerservice.service.SellerService;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,13 @@ public class SellerController {
         this.sellerService = sellerService;
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Seller> createSeller(@RequestBody SellerRequest seller) {
-        return ResponseEntity.ok(sellerService.createSeller(seller));
+    @PostMapping("/register")
+    public ResponseEntity<Seller> registerSeller(@RequestBody RegisterSeller seller) {
+        return ResponseEntity.ok(sellerService.registerSeller(seller));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Seller> loginSeller(@RequestBody LoginSeller seller) {
+        return ResponseEntity.ok(sellerService.loginSeller(seller));
     }
 }

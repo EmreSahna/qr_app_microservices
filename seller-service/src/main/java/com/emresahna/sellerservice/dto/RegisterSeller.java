@@ -3,7 +3,7 @@ package com.emresahna.sellerservice.dto;
 import lombok.Data;
 
 @Data
-public class SellerRequest {
+public class RegisterSeller {
     private String seller_name;
     private String tax_id;
     private String phone;

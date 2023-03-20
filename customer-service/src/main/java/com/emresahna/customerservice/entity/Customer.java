@@ -19,6 +19,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String customerName;
+    private String password;
     private String phone;
     private String email;
     private String bankDetails;

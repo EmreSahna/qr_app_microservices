@@ -35,6 +35,7 @@ public class CustomerServiceApplication {
 					.customerName("Huseyin")
 					.email("huseyin@hotmail.com")
 					.phone("123456789")
+					.password("1234")
 					.bankDetails("123456789")
 					.createdAt(new Timestamp(System.currentTimeMillis()))
 					.build();

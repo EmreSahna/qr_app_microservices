@@ -19,6 +19,7 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String sellerName;
+    private String password;
     private String taxId;
     private String phone;
     private String email;

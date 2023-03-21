@@ -29,4 +29,8 @@ public record CustomerWalletService(CustomerWalletRepository customerWalletRepos
         customerWallet.setBalance(customerWallet.getBalance().subtract(balanceRequest.getAmount()));
         return customerWalletRepository.save(customerWallet);
     }
+
+    public CustomerWallet getBalance(String customer_id) {
+        return customerWalletRepository.findByCustomerId(customer_id);
+    }
 }

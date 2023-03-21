@@ -2,10 +2,12 @@ package com.emresahna.customerservice.controller;
 
 import com.emresahna.customerservice.dto.CustomerTransactionRequest;
 import com.emresahna.customerservice.dto.SellerIdResponse;
+import com.emresahna.customerservice.entity.CustomerTransaction;
 import com.emresahna.customerservice.service.CustomerTransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 @RestController
 @RequestMapping("/customer-transaction")
@@ -24,5 +26,10 @@ public class CustomerTransactionController {
     @PostMapping("/pay")
     public ResponseEntity<String> doPayment(@RequestBody CustomerTransactionRequest customerTransactionRequest) {
         return ResponseEntity.ok(customerTransactionService.createCustomerTransactionWithWallet(customerTransactionRequest));
+    }
+
+    @GetMapping("/get-transaction/{customer_id}")
+    public ResponseEntity<List<CustomerTransaction>> getTransactions(@PathVariable String customer_id) {
+        return ResponseEntity.ok(customerTransactionService.getTransactions(customer_id));
     }
 }

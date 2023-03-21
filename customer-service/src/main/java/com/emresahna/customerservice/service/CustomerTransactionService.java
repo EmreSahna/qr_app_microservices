@@ -20,8 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.List;
 import java.sql.Timestamp;
 
 @Service
@@ -95,5 +94,9 @@ public record CustomerTransactionService(CustomerTransactionRepository customerT
         }
 
         return sellerIdResponse;
+    }
+
+    public List<CustomerTransaction> getTransactions(String customerId) {
+        return customerTransactionRepository.findAllByCustomerId(customerId);
     }
 }

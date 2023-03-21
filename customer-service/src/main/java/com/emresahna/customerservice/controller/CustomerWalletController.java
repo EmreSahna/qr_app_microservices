@@ -25,4 +25,9 @@ public class CustomerWalletController {
     public ResponseEntity<CustomerWallet> addBalance(@RequestBody BalanceRequest balanceRequest) {
         return ResponseEntity.ok(customerWalletService.addBalance(balanceRequest));
     }
+
+    @GetMapping("/get-balance/{customer_id}")
+    public ResponseEntity<CustomerWallet> getBalance(@PathVariable String customer_id) {
+        return ResponseEntity.ok(customerWalletService.getBalance(customer_id));
+    }
 }

@@ -25,4 +25,9 @@ public class CustomerController {
     public ResponseEntity<Customer> loginCustomer(@RequestBody LoginRequest customer) {
         return ResponseEntity.ok(customerService.loginCustomer(customer));
     }
+
+    @GetMapping("/get-customer/{customer_id}")
+    public ResponseEntity<Customer> getCustomer(@PathVariable String customer_id) {
+        return ResponseEntity.ok(customerService.getCustomer(customer_id));
+    }
 }

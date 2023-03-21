@@ -36,6 +36,7 @@ public class SellerServiceApplication {
 					.phone("1234567890")
 					.email("emre.sahna@hotmail.com")
 					.accountNumber("1234567890")
+					.password("1234")
 					.bankDetails("1234567890")
 					.createdAt(new Timestamp(System.currentTimeMillis()))
 					.build();

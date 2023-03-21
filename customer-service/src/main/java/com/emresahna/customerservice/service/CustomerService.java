@@ -25,4 +25,8 @@ public record CustomerService(CustomerRepository customerRepository) {
     public Customer loginCustomer(LoginRequest customer) {
         return customerRepository.findByEmailAndPassword(customer.getEmail(), customer.getPassword());
     }
+
+    public Customer getCustomer(String customer_id) {
+        return customerRepository.findById(customer_id).orElse(null);
+    }
 }

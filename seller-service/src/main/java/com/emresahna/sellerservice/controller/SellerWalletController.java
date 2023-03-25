@@ -1,10 +1,12 @@
 package com.emresahna.sellerservice.controller;
 
 import com.emresahna.sellerservice.dto.BalanceRequest;
-import com.emresahna.sellerservice.dto.GeneratedQRCodeResponse;
 import com.emresahna.sellerservice.dto.SellerIdRequest;
 import com.emresahna.sellerservice.entity.SellerWallet;
 import com.emresahna.sellerservice.service.SellerWalletService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +33,12 @@ public class SellerWalletController {
     }
 
     @PostMapping("/generate-qr-code")
-    public ResponseEntity<GeneratedQRCodeResponse> generateQrCode(@RequestBody SellerIdRequest sellerIdRequest) {
-        return ResponseEntity.ok(sellerWalletService.generateQrCode(sellerIdRequest));
+    public ResponseEntity<byte[]> generateQrCode(@RequestBody SellerIdRequest sellerIdRequest) {
+        byte[] qrCodeBytes = sellerWalletService.generateQrCode(sellerIdRequest);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(qrCodeBytes.length);
+        return new ResponseEntity<>(qrCodeBytes, headers, HttpStatus.OK);
     }
 }

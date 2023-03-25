@@ -1,7 +1,6 @@
 package com.emresahna.sellerservice.service;
 
 import com.emresahna.sellerservice.dto.BalanceRequest;
-import com.emresahna.sellerservice.dto.GeneratedQRCodeResponse;
 import com.emresahna.sellerservice.dto.SellerIdRequest;
 import com.emresahna.sellerservice.entity.SellerWallet;
 import com.emresahna.sellerservice.repository.SellerWalletRepository;
@@ -32,10 +31,7 @@ public record SellerWalletService(SellerWalletRepository sellerWalletRepository)
         return sellerWalletRepository.save(sellerWallet);
     }
 
-    public GeneratedQRCodeResponse generateQrCode(SellerIdRequest sellerIdRequest) {
-        String path = GenerateQRCode.generateQRCode(sellerIdRequest);
-        return GeneratedQRCodeResponse.builder()
-                .path(path)
-                .build();
+    public byte[] generateQrCode(SellerIdRequest sellerIdRequest) {
+        return GenerateQRCode.generateQRCode(sellerIdRequest);
     }
 }

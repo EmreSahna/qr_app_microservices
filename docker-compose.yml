@@ -1,0 +1,102 @@
+version: '3.7'
+
+services:
+  eureka-server:
+    container_name: eureka-server
+    build:
+        context: ./eureka-server
+        dockerfile: Dockerfile
+    image: 'eureka-server:latest'
+    ports:
+      - '8761:8761'
+    environment:
+      - eureka.client.register-with-eureka=false
+      - eureka.client.fetch-registry=false
+    networks:
+      - qr-app-network
+
+  api-gateway:
+    container_name: api-gateway
+    build:
+        context: ./api-gateway
+        dockerfile: Dockerfile
+    image: 'api-gateway:latest'
+    ports:
+      - '8889:8889'
+    environment:
+      - server.port=8889
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka
+      - eureka.client.register-with-eureka=true
+      - eureka.instance.prefer-ip-address=true
+    depends_on:
+      - eureka-server
+    networks:
+      - qr-app-network
+
+  customer-service:
+    container_name: customer-service
+    build:
+        context: ./customer-service
+        dockerfile: Dockerfile
+    image: 'customer-service:latest'
+    ports:
+      - '8081:8081'
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysql-database:3306/customerdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - spring.datasource.username=root
+      - spring.datasource.password=root123
+      - server.port=8081
+      - spring.application.name=customer-service
+      - eureka.instance.prefer-ip-address=true
+      - eureka.client.register-with-eureka=true
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka/
+    depends_on:
+      - mysql-database
+      - eureka-server
+      - api-gateway
+    networks:
+      - qr-app-network
+
+  seller-service:
+    container_name: seller-service
+    build:
+        context: ./seller-service
+        dockerfile: Dockerfile
+    image: 'seller-service:latest'
+    ports:
+      - '8082:8082'
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysql-database:3306/sellerdb?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      - spring.datasource.username=root
+      - spring.datasource.password=root123
+      - server.port=8082
+      - spring.application.name=seller-service
+      - eureka.instance.prefer-ip-address=true
+      - eureka.client.register-with-eureka=true
+      - eureka.client.service-url.defaultZone=http://eureka-server:8761/eureka/
+    depends_on:
+      - mysql-database
+      - eureka-server
+      - api-gateway
+    networks:
+      - qr-app-network
+
+  mysql-database:
+    container_name: mysql-database
+    image: 'mysql:latest'
+    restart: always
+    ports:
+      - '3306:3306'
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_PASSWORD: root123
+    networks:
+      - qr-app-network
+
+volumes:
+  mysql-data:
+
+networks:
+  qr-app-network:

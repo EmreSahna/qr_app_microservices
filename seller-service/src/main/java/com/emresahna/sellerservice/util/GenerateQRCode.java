@@ -8,17 +8,14 @@ import com.google.zxing.common.BitMatrix;
 import lombok.experimental.UtilityClass;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Paths;
 import java.util.UUID;
 
 @UtilityClass
 public class GenerateQRCode {
 
-    public byte[] generateQRCode(SellerIdRequest sellerIdRequest) {
-        String path = String.format("C:\\Users\\user\\Desktop\\%s_QRCode.jpg", UUID.randomUUID());
-
+    public byte[] generateQRCode(String sellerId) {
         StringBuilder sellerDetails = new StringBuilder();
-        sellerDetails.append("{").append("\"seller_id\":").append("\"").append(sellerIdRequest.getSeller_id()).append("\"").append("}");
+        sellerDetails.append("{").append("\"seller_id\":").append("\"").append(sellerId).append("\"").append("}");
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {

@@ -20,6 +20,7 @@ public class SellerTransaction {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String buyerId;
+    private String sellerId;
     private String purchaseItemId;
     private BigDecimal amount;
     private Timestamp createdAt;

@@ -8,10 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/seller-wallet")
@@ -32,9 +29,9 @@ public class SellerWalletController {
         return ResponseEntity.ok(sellerWalletService.withdrawBalance(balanceRequest));
     }
 
-    @PostMapping("/generate-qr-code")
-    public ResponseEntity<byte[]> generateQrCode(@RequestBody SellerIdRequest sellerIdRequest) {
-        byte[] qrCodeBytes = sellerWalletService.generateQrCode(sellerIdRequest);
+    @GetMapping("/generate-qr-code/{sellerId}")
+    public ResponseEntity<byte[]> generateQrCode(@PathVariable String sellerId) {
+        byte[] qrCodeBytes = sellerWalletService.generateQrCode(sellerId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);

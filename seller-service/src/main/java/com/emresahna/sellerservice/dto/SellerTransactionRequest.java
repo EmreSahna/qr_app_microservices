@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class SellerTransactionRequest {
     private String buyer_id;
+    private String seller_id;
     private String purchased_item_id;
     private BigDecimal amount;
 }

@@ -8,6 +8,7 @@ import com.emresahna.sellerservice.repository.SellerTransactionRepository;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Service
 public record SellerTransactionService(SellerTransactionRepository sellerTransactionRepository, SellerWalletService sellerWalletService) {
@@ -29,9 +30,14 @@ public record SellerTransactionService(SellerTransactionRepository sellerTransac
 
         createSellerTransaction(SellerTransactionRequest.builder()
                 .buyer_id(transactionRequest.getBuyer_id())
+                .seller_id(transactionRequest.getSeller_id())
                 .purchased_item_id(transactionRequest.getPurchased_item_id())
                 .amount(transactionRequest.getAmount())
                 .build());
         return true;
+    }
+
+    public List<SellerTransaction> getTransactions(String sellerId) {
+        return sellerTransactionRepository.findBySellerId(sellerId);
     }
 }

@@ -31,7 +31,7 @@ public record SellerWalletService(SellerWalletRepository sellerWalletRepository)
         return sellerWalletRepository.save(sellerWallet);
     }
 
-    public byte[] generateQrCode(SellerIdRequest sellerIdRequest) {
-        return GenerateQRCode.generateQRCode(sellerIdRequest);
+    public byte[] generateQrCode(String sellerId) {
+        return GenerateQRCode.generateQRCode(sellerId);
     }
 }

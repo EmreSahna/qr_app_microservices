@@ -23,4 +23,8 @@ public record SellerService(SellerRepository sellerRepository) {
     public Seller loginSeller(LoginSeller loginSeller) {
         return sellerRepository.findByEmailAndPassword(loginSeller.getEmail(), loginSeller.getPassword());
     }
+
+    public Seller getSeller(String customer_id) {
+        return sellerRepository.findById(customer_id).orElse(null);
+    }
 }

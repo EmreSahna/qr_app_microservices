@@ -25,4 +25,9 @@ public class SellerController {
     public ResponseEntity<Seller> loginSeller(@RequestBody LoginSeller seller) {
         return ResponseEntity.ok(sellerService.loginSeller(seller));
     }
+
+    @GetMapping("/get-seller/{sellerId}")
+    public ResponseEntity<Seller> getSeller(@PathVariable String sellerId) {
+        return ResponseEntity.ok(sellerService.getSeller(sellerId));
+    }
 }

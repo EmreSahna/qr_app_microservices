@@ -1,3 +1,6 @@
 # Spring Boot Microservices Application
-- Customer Service
-- Seller Service
+- User Service
+- Wallet Service
+- Transaction Service
+- Euraka Service
+- API Gateway Service

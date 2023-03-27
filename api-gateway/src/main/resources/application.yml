@@ -4,14 +4,18 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: customer-service
-          uri: lb://customer-service
+        - id: user-service
+          uri: lb://user-service
           predicates:
-            - Path=/customer-wallet/**, /customer/**, /customer-transaction/**
-        - id: seller-service
-          uri: lb://seller-service
+            - Path=/seller/**, /customer/**
+        - id: transaction-service
+          uri: lb://transaction-service
           predicates:
-            - Path=/seller/**, /seller-wallet/**, /seller-transaction/**
+            - Path=/customer-transaction/**, /seller-transaction/**
+        - id: wallet-service
+          uri: lb://wallet-service
+          predicates:
+            - Path=/customer-wallet/**, /seller-wallet/**
       discovery:
         locator:
           enabled: true

@@ -12,5 +12,5 @@ public interface WalletService {
     void addBalance(@RequestBody BalanceRequest balanceRequest);
 
     @PostMapping("/customer-wallet/decrement-balance")
-    void decrementBalance(@RequestBody BalanceRequest balanceRequest);
+    boolean decrementBalance(@RequestBody BalanceRequest balanceRequest);
 }

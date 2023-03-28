@@ -24,10 +24,16 @@ public record CustomerWalletService(CustomerWalletRepository customerWalletRepos
         return customerWalletRepository.save(customerWallet);
     }
 
-    public void decrementBalance(BalanceRequest balanceRequest) {
+    public Boolean decrementBalance(BalanceRequest balanceRequest) {
         CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId());
+
+        if(customerWallet.getBalance().compareTo(balanceRequest.getAmount()) < 0) {
+            return false;
+        }
+
         customerWallet.setBalance(customerWallet.getBalance().subtract(balanceRequest.getAmount()));
         customerWalletRepository.save(customerWallet);
+        return true;
     }
 
     public CustomerWallet getBalance(String customer_id) {

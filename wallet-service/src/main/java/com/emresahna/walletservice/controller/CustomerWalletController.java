@@ -27,8 +27,8 @@ public class CustomerWalletController {
     }
 
     @PostMapping("/decrement-balance")
-    public void decrementBalance(@RequestBody BalanceRequest balanceRequest) {
-        customerWalletService.decrementBalance(balanceRequest);
+    public Boolean decrementBalance(@RequestBody BalanceRequest balanceRequest) {
+        return customerWalletService.decrementBalance(balanceRequest);
     }
 
     @GetMapping("/get-balance/{customer_id}")

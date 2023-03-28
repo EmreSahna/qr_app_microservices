@@ -47,27 +47,27 @@ public record CustomerTransactionService(CustomerTransactionRepository customerT
     public String createCustomerTransactionWithWallet(CustomerTransactionRequest customerTransactionRequest) {
         CustomerTransaction customerTransaction = createCustomerTransaction(customerTransactionRequest);
 
-        Boolean isTransactionDone = sellerTransactionService.createSellerTransactionWithWallet(
+        if(!walletService.decrementBalance(BalanceRequest.builder()
+                .id(customerTransaction.getCustomerId())
+                .amount(customerTransaction.getAmount())
+                .build())){
+            changeTransactionStatus(customerTransaction.getId(), "CANCELLED");
+            return "Transaction is failed";
+        }
+
+        if(!sellerTransactionService.createSellerTransactionWithWallet(
                 TransactionRequest.builder()
                         .seller_id(customerTransaction.getSellerId())
                         .buyer_id(customerTransaction.getCustomerId())
                         .purchased_item_id(customerTransaction.getPurchasedItemId())
                         .amount(customerTransaction.getAmount())
-                        .build());
-
-        if (isTransactionDone) {
-            changeTransactionStatus(customerTransaction.getId(), "SUCCESS");
-
-            walletService.decrementBalance(BalanceRequest.builder()
-                        .id(customerTransaction.getCustomerId())
-                        .amount(customerTransaction.getAmount())
-                    .build());
-
-            return "Transaction is successful";
+                        .build())){
+            changeTransactionStatus(customerTransaction.getId(), "FAILED");
+            return "Transaction is failed";
         }
 
-        changeTransactionStatus(customerTransaction.getId(), "FAILED");
-        return "Transaction is failed";
+        changeTransactionStatus(customerTransaction.getId(), "SUCCESS");
+        return "Transaction is success";
     }
 
     public SellerIdResponse getDataFormQRCode(MultipartFile qrPhoto) {

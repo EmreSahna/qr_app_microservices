@@ -30,4 +30,9 @@ public class SellerController {
     public ResponseEntity<Seller> getSeller(@PathVariable String sellerId) {
         return ResponseEntity.ok(sellerService.getSeller(sellerId));
     }
+
+    @GetMapping("/get-seller-email/{sellerId}")
+    public String getSellerEmail(@PathVariable String sellerId){
+        return sellerService.getSellerEmail(sellerId);
+    }
 }

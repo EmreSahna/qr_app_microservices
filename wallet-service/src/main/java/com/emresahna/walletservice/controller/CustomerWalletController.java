@@ -31,8 +31,8 @@ public class CustomerWalletController {
         return customerWalletService.decrementBalance(balanceRequest);
     }
 
-    @GetMapping("/get-balance/{customer_id}")
-    public ResponseEntity<CustomerWallet> getBalance(@PathVariable String customer_id) {
-        return ResponseEntity.ok(customerWalletService.getBalance(customer_id));
+    @GetMapping("/{customer_id}")
+    public ResponseEntity<CustomerWallet> getCustomerWallet(@PathVariable String customer_id) {
+        return ResponseEntity.ok(customerWalletService.getCustomerWallet(customer_id));
     }
 }

@@ -3,6 +3,7 @@ package com.emresahna.walletservice.service;
 import com.emresahna.walletservice.dto.BalanceRequest;
 import com.emresahna.walletservice.dto.CustomerWalletRequest;
 import com.emresahna.walletservice.entity.CustomerWallet;
+import com.emresahna.walletservice.exception.CustomerWalletNotFoundException;
 import com.emresahna.walletservice.repository.CustomerWalletRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,16 @@ public record CustomerWalletService(CustomerWalletRepository customerWalletRepos
     }
 
     public CustomerWallet addBalance(BalanceRequest balanceRequest) {
-        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId());
+        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId())
+                .orElseThrow(() -> new CustomerWalletNotFoundException("Customer wallet not found"));
+
         customerWallet.setBalance(customerWallet.getBalance().add(balanceRequest.getAmount()));
         return customerWalletRepository.save(customerWallet);
     }
 
     public Boolean decrementBalance(BalanceRequest balanceRequest) {
-        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId());
+        CustomerWallet customerWallet = customerWalletRepository.findByCustomerId(balanceRequest.getId())
+                .orElseThrow(() -> new CustomerWalletNotFoundException("Customer wallet not found"));
 
         if(customerWallet.getBalance().compareTo(balanceRequest.getAmount()) < 0) {
             return false;
@@ -36,7 +40,8 @@ public record CustomerWalletService(CustomerWalletRepository customerWalletRepos
         return true;
     }
 
-    public CustomerWallet getBalance(String customer_id) {
-        return customerWalletRepository.findByCustomerId(customer_id);
+    public CustomerWallet getCustomerWallet(String customer_id) {
+        return customerWalletRepository.findByCustomerId(customer_id)
+                .orElseThrow(() -> new CustomerWalletNotFoundException("Customer wallet not found"));
     }
 }

@@ -24,7 +24,7 @@ public class NotificationService {
     }
 
     @KafkaListener(topics = "seller-transaction")
-    public void handleNotification(SellerTransactionNotificationRequest email) {
+    public void handleSellerTransaction(SellerTransactionNotificationRequest email) {
         MimeMessage message = mailSender.createMimeMessage();
 
         try {

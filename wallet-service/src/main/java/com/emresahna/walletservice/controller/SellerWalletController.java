@@ -2,6 +2,7 @@ package com.emresahna.walletservice.controller;
 
 import com.emresahna.walletservice.dto.BalanceRequest;
 import com.emresahna.walletservice.dto.SellerIdRequest;
+import com.emresahna.walletservice.entity.CustomerWallet;
 import com.emresahna.walletservice.entity.SellerWallet;
 import com.emresahna.walletservice.service.SellerWalletService;
 import org.springframework.http.HttpHeaders;
@@ -42,5 +43,10 @@ public class SellerWalletController {
         headers.setContentType(MediaType.IMAGE_PNG);
         headers.setContentLength(qrCodeBytes.length);
         return new ResponseEntity<>(qrCodeBytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{seller_id}")
+    public ResponseEntity<SellerWallet> getSellerWallet(@PathVariable String seller_id) {
+        return ResponseEntity.ok(sellerWalletService.getSellerWallet(seller_id));
     }
 }

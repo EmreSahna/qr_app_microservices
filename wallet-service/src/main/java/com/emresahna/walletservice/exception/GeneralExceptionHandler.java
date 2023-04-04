@@ -12,4 +12,9 @@ public class GeneralExceptionHandler {
     public ResponseEntity<?> handle(CustomerWalletNotFoundException exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(SellerWalletNotFoundException.class)
+    public ResponseEntity<?> handle(SellerWalletNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }

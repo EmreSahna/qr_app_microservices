@@ -16,6 +16,10 @@ spring:
           uri: lb://wallet-service
           predicates:
             - Path=/customer-wallet/**, /seller-wallet/**
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            - Path=/product/**, /category/**, /product-image/**
       discovery:
         locator:
           enabled: true

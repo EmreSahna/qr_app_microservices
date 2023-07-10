@@ -6,4 +6,5 @@ import java.io.File;
 
 public interface ImageService {
     String uploadImage(Long productId, MultipartFile file);
+    byte[] getImage(String url);
 }

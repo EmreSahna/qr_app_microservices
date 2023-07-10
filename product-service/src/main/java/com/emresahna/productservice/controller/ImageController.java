@@ -2,11 +2,10 @@ package com.emresahna.productservice.controller;
 
 import com.emresahna.productservice.service.ImageService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -19,4 +18,13 @@ public class ImageController {
     public ResponseEntity<String> uploadImage(@RequestParam("productId") Long productId, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok(imageService.uploadImage(productId, file));
     }
+
+    @GetMapping(value = "/{imageUrl}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String imageUrl) {
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(imageService.getImage(imageUrl));
+    }
+
 }

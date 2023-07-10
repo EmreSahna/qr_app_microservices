@@ -1,6 +1,7 @@
 package com.emresahna.productservice.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.emresahna.productservice.entity.Image;
 import com.emresahna.productservice.repository.ImageRepository;
 import com.emresahna.productservice.service.ImageService;
@@ -33,7 +34,7 @@ public class ImageServiceImpl implements ImageService {
         File convertedFile = convertMultiPartToFile(file);
         String fileUrl = file.getOriginalFilename()+ "-" + productId;
         s3Client.putObject(bucketName , fileUrl, convertedFile);
-
+        convertedFile.delete();
         Image image = Image.builder()
                 .url(baseUrl + fileUrl)
                 .build();
@@ -43,6 +44,16 @@ public class ImageServiceImpl implements ImageService {
         productServiceImpl.setProductImage(productId, image);
 
         return baseUrl + fileUrl;
+    }
+
+    @Override
+    public byte[] getImage(String url) {
+        S3ObjectInputStream object = s3Client.getObject(bucketName, url).getObjectContent();
+        try {
+            return object.readAllBytes();
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to get image from S3");
+        }
     }
 
     private File convertMultiPartToFile(final MultipartFile multipartFile) {

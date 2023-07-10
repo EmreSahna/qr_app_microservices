@@ -2,6 +2,7 @@ package com.emresahna.productservice.controller;
 
 import com.emresahna.productservice.dto.ProductRequest;
 import com.emresahna.productservice.dto.ProductResponse;
+import com.emresahna.productservice.dto.ProductTransactionRequest;
 import com.emresahna.productservice.entity.Product;
 import com.emresahna.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,10 @@ public class ProductController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(productService.getProduct(id));
+    }
+
+    @PostMapping("/check")
+    public void checkProductsAvabilityAndPrice(@RequestBody ProductTransactionRequest[] products) {
+        productService.checkProductsAvabilityAndPrice(products);
     }
 }

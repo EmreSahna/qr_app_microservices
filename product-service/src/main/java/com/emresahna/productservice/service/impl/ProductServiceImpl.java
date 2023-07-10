@@ -2,6 +2,7 @@ package com.emresahna.productservice.service.impl;
 
 import com.emresahna.productservice.dto.ProductRequest;
 import com.emresahna.productservice.dto.ProductResponse;
+import com.emresahna.productservice.dto.ProductTransactionRequest;
 import com.emresahna.productservice.entity.Category;
 import com.emresahna.productservice.entity.Image;
 import com.emresahna.productservice.entity.Product;
@@ -39,5 +40,24 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProduct(Long id) {
         return productRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    public void checkProductsAvabilityAndPrice(ProductTransactionRequest[] products) {
+        for (ProductTransactionRequest product : products) {
+            Product productFromDb = productRepository.findById(product.getId()).orElseThrow();
+            if (productFromDb.getStock() < product.getQuantity() || !productFromDb.getPrice().equals(product.getPrice())) {
+                throw new RuntimeException("Product with id " + product.getId() + " is not available or price is not correct");
+            }
+        }
+        productsQuantityUpdate(products);
+    }
+
+    public void productsQuantityUpdate(ProductTransactionRequest[] products) {
+        for (ProductTransactionRequest product : products) {
+            Product productFromDb = productRepository.findById(product.getId()).orElseThrow();
+            productFromDb.setStock(productFromDb.getStock() - product.getQuantity());
+            productRepository.save(productFromDb);
+        }
     }
 }

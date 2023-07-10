@@ -19,6 +19,7 @@ public class Product extends BaseEntity {
     private String name;
     private String description;
     private BigDecimal price;
+    private Integer stock;
     private Long userId;
     @Enumerated(EnumType.ORDINAL)
     private Status isActive;

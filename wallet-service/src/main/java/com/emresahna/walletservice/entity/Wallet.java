@@ -8,16 +8,16 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
-@Entity
-@Table(name = "customer_wallet")
 @Data
+@Entity
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class CustomerWallet {
+@AllArgsConstructor
+@Table(name = "wallet")
+public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String customerId;
+    private String userId;
     private BigDecimal balance;
 }

@@ -13,7 +13,7 @@ public class GenerateQRCode {
 
     public byte[] generateQRCode(String sellerId) {
         StringBuilder sellerDetails = new StringBuilder();
-        sellerDetails.append("{").append("\"seller_id\":").append("\"").append(sellerId).append("\"").append("}");
+        sellerDetails.append("{").append("\"user_id\":").append("\"").append(sellerId).append("\"").append("}");
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {

@@ -3,5 +3,6 @@
 - Wallet Service
 - Transaction Service
 - Notification Service
+- Product Service
 - Euraka Service
 - API Gateway Service

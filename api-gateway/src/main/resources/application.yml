@@ -7,7 +7,7 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/seller/**, /customer/**
+            - Path=/user/**, /card/**
         - id: transaction-service
           uri: lb://transaction-service
           predicates:
@@ -15,7 +15,7 @@ spring:
         - id: wallet-service
           uri: lb://wallet-service
           predicates:
-            - Path=/customer-wallet/**, /seller-wallet/**
+            - Path=/wallet/**
         - id: product-service
           uri: lb://product-service
           predicates:

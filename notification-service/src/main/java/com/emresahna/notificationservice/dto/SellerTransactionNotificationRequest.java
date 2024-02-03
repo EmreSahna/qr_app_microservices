@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -14,5 +14,5 @@ public class SellerTransactionNotificationRequest {
     private String customer_id;
     private String seller_email;
     private BigDecimal amount;
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 }

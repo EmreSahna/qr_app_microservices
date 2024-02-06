@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches:
-      - test-actions
+      - main
 
 env:
   REGISTRY: docker.io

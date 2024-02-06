@@ -2,12 +2,15 @@ package com.emresahna.walletservice.service.impl;
 
 import com.emresahna.walletservice.dto.BalanceRequest;
 import com.emresahna.walletservice.dto.CreateWalletRequest;
+import com.emresahna.walletservice.dto.TransactionEvent;
 import com.emresahna.walletservice.entity.Wallet;
 import com.emresahna.walletservice.exception.WalletNotFoundException;
 import com.emresahna.walletservice.repository.WalletRepository;
 import com.emresahna.walletservice.service.WalletService;
 import com.emresahna.walletservice.util.GenerateQRCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,6 +19,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class WalletServiceImpl implements WalletService {
     private final WalletRepository walletRepository;
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
 
     @Override
     public Wallet createWallet(CreateWalletRequest walletRequest) {
@@ -43,6 +47,19 @@ public class WalletServiceImpl implements WalletService {
 
         wallet.setBalance(wallet.getBalance().subtract(balanceRequest.getAmount()));
         return walletRepository.save(wallet);
+    }
+
+    @KafkaListener(topics = "product_availability_success")
+    private void doTransaction(TransactionEvent transactionEvent) {
+        try {
+            decrementBalance(BalanceRequest.builder().id(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
+            addBalance(BalanceRequest.builder().id(transactionEvent.getSellerId()).amount(transactionEvent.getAmount()).build());
+        }catch (Exception e){
+            kafkaTemplate.send("payment_failed", transactionEvent);
+            return;
+        }
+
+        kafkaTemplate.send("payment_success", transactionEvent);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.emresahna.productservice.service.impl;
 import com.emresahna.productservice.dto.ProductRequest;
 import com.emresahna.productservice.dto.ProductResponse;
 import com.emresahna.productservice.dto.ProductTransactionRequest;
+import com.emresahna.productservice.dto.TransactionEvent;
 import com.emresahna.productservice.entity.Category;
 import com.emresahna.productservice.entity.Image;
 import com.emresahna.productservice.entity.Product;
@@ -10,6 +11,8 @@ import com.emresahna.productservice.mapper.ProductMapper;
 import com.emresahna.productservice.repository.ProductRepository;
 import com.emresahna.productservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
     private final ProductRepository productRepository;
     private final CategoryServiceImpl categoryServiceImpl;
 
@@ -42,18 +46,34 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(id).orElseThrow();
     }
 
-    @Override
-    public void checkProductsAvabilityAndPrice(ProductTransactionRequest[] products) {
+    @KafkaListener(topics = "transaction_created", groupId = "product-group")
+    private void checkProductsAvailabilityAndPrice(TransactionEvent transactionEvent) {
+        List<ProductTransactionRequest> products = transactionEvent.getProductIds();
         for (ProductTransactionRequest product : products) {
             Product productFromDb = productRepository.findById(product.getId()).orElseThrow();
             if (productFromDb.getStock() < product.getQuantity() || !productFromDb.getPrice().equals(product.getPrice())) {
-                throw new RuntimeException("Product with id " + product.getId() + " is not available or price is not correct");
+                kafkaTemplate.send("product_availability_failed", transactionEvent);
+                return;
             }
         }
+
         productsQuantityUpdate(products);
+        kafkaTemplate.send("product_availability_success", transactionEvent);
     }
 
-    public void productsQuantityUpdate(ProductTransactionRequest[] products) {
+    @KafkaListener(topics = "payment_failed", groupId = "product-group")
+    private void productsQuantityRollback(TransactionEvent transactionEvent) {
+        List<ProductTransactionRequest> products = transactionEvent.getProductIds();
+        for (ProductTransactionRequest product : products) {
+            Product productFromDb = productRepository.findById(product.getId()).orElseThrow();
+            productFromDb.setStock(productFromDb.getStock() + product.getQuantity());
+            productRepository.save(productFromDb);
+        }
+
+        kafkaTemplate.send("product_rollback", transactionEvent);
+    }
+
+    public void productsQuantityUpdate(List<ProductTransactionRequest> products) {
         for (ProductTransactionRequest product : products) {
             Product productFromDb = productRepository.findById(product.getId()).orElseThrow();
             productFromDb.setStock(productFromDb.getStock() - product.getQuantity());

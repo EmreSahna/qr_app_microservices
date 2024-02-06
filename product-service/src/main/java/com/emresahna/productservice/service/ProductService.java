@@ -8,5 +8,4 @@ import com.emresahna.productservice.entity.Product;
 public interface ProductService {
     ProductResponse createProduct(ProductRequest productRequest);
     Product getProduct(Long id);
-    void checkProductsAvabilityAndPrice(ProductTransactionRequest[] products);
 }

@@ -19,9 +19,7 @@ public class WalletController {
 
     @PostMapping
     public ResponseEntity<Wallet> createWallet(@RequestBody CreateWalletRequest createWalletRequest) {
-        return ResponseEntity
-                .ok()
-                .body(walletService.createWallet(createWalletRequest));
+        return ResponseEntity.status(HttpStatus.CREATED).body(walletService.createWallet(createWalletRequest));
     }
 
     @GetMapping("/{userId}")

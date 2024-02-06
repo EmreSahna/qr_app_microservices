@@ -1,8 +1,5 @@
 package com.emresahna.transactionservice.service.impl;
 
-import com.emresahna.transactionservice.client.ProductService;
-import com.emresahna.transactionservice.client.UserService;
-import com.emresahna.transactionservice.client.WalletService;
 import com.emresahna.transactionservice.dto.*;
 import com.emresahna.transactionservice.entity.Transaction;
 import com.emresahna.transactionservice.entity.TransactionStatus;
@@ -18,69 +15,70 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
-    private final WalletService walletService;
-    private final KafkaTemplate<String, SellerTransactionNotificationRequest> kafkaTemplate;
-    private final UserService userService;
-    private final ProductService productService;
+    private final KafkaTemplate<String, TransactionEvent> kafkaTemplate;
 
     @Override
     public Transaction createTransaction(TransactionRequest transactionRequest) {
-        productService.checkProductsAvabilityAndPrice(transactionRequest.getPurchasedItems().toArray(new ProductTransactionRequest[0]));
-
         Transaction transaction = TransactionMapper.mapTransactionRequestToTransaction(transactionRequest);
-        transactionRepository.save(transaction);
+        Transaction createdTransaction = transactionRepository.save(transaction);
 
-        decrementBalanceFromCustomerWallet(transaction);
-
-        addPaymentToSellerWallet(transaction);
-
-        notifySellerWithEmail(transaction);
-
-        changeTransactionStatus(transaction.getId(), TransactionStatus.COMPLETED);
+        kafkaTemplate.send("transaction_created",
+                TransactionEvent.builder()
+                .id(createdTransaction.getId())
+                .customerId(transaction.getCustomerId())
+                .sellerId(transaction.getSellerId())
+                .productIds(transaction.getProductIds())
+                .amount(transaction.getAmount())
+                .status(transaction.getStatus())
+                .createdAt(transaction.getCreatedAt())
+                .lastModifiedAt(transaction.getLastModifiedAt())
+                .build()
+        );
 
         return transaction;
     }
 
-    public void decrementBalanceFromCustomerWallet(Transaction transaction){
-        walletService.decrementBalance(BalanceRequest.builder()
-                .id(transaction.getCustomerId())
-                .amount(transaction.getAmount())
-                .build());
-    }
+    @KafkaListener(topics = "product_availability_failed", groupId = "transaction-group")
+    private void failedProductAvailabilityCheck(TransactionEvent transactionEvent){
+        Transaction transaction = transactionRepository.findById(
+                transactionEvent.getId()
+        ).orElseThrow();
 
-    public void addPaymentToSellerWallet(Transaction transaction){
-        walletService.addBalance(BalanceRequest.builder()
-                .id(transaction.getSellerId())
-                .amount(transaction.getAmount())
-                .build());
-    }
-
-    public void changeTransactionStatus(String transactionId, TransactionStatus status){
-        Transaction transaction = transactionRepository.findById(transactionId).get();
-        transaction.setStatus(status);
+        transaction.setStatus(TransactionStatus.FAILED_PRODUCT_AVAILABILITY);
         transactionRepository.save(transaction);
     }
 
-    public void notifySellerWithEmail(Transaction transaction){
-        kafkaTemplate.send("seller-transaction", new SellerTransactionNotificationRequest(
-                transaction.getCustomerId(),
-                userService.getSellerEmail(transaction.getSellerId()),
-                transaction.getAmount(),
-                transaction.getCreatedAt()
-        ));
+    @KafkaListener(topics = "product_rollback", groupId = "transaction-group")
+    private void failedPayment(TransactionEvent transactionEvent){
+        Transaction transaction = transactionRepository.findById(
+                transactionEvent.getId()
+        ).orElseThrow();
+
+        transaction.setStatus(TransactionStatus.FAILED_PAYMENT);
+        transactionRepository.save(transaction);
+    }
+
+    @KafkaListener(topics = "payment_success", groupId = "transaction-group")
+    private void successPayment(TransactionEvent transactionEvent){
+        Transaction transaction = transactionRepository.findById(
+                transactionEvent.getId()
+        ).orElseThrow();
+
+        transaction.setStatus(TransactionStatus.COMPLETED);
+        transactionRepository.save(transaction);
     }
 
     @Override

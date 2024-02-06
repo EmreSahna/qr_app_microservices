@@ -31,8 +31,4 @@ public class ProductController {
                 .body(productService.getProduct(id));
     }
 
-    @PostMapping("/check")
-    public void checkProductsAvabilityAndPrice(@RequestBody ProductTransactionRequest[] products) {
-        productService.checkProductsAvabilityAndPrice(products);
-    }
 }

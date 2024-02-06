@@ -50,16 +50,33 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @KafkaListener(topics = "product_availability_success")
-    private void doTransaction(TransactionEvent transactionEvent) {
+    private void doDecrement(TransactionEvent transactionEvent) {
         try {
             decrementBalance(BalanceRequest.builder().id(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
-            addBalance(BalanceRequest.builder().id(transactionEvent.getSellerId()).amount(transactionEvent.getAmount()).build());
-        }catch (Exception e){
+        }catch (IllegalArgumentException | WalletNotFoundException e){
             kafkaTemplate.send("payment_failed", transactionEvent);
             return;
         }
 
+        kafkaTemplate.send("decrement_success", transactionEvent);
+    }
+
+    @KafkaListener(topics = "decrement_success")
+    private void doIncrement(TransactionEvent transactionEvent) {
+        try {
+            addBalance(BalanceRequest.builder().id(transactionEvent.getSellerId()).amount(transactionEvent.getAmount()).build());
+        }catch (IllegalArgumentException | WalletNotFoundException e){
+            kafkaTemplate.send("decrement_rollback", transactionEvent);
+            return;
+        }
+
         kafkaTemplate.send("payment_success", transactionEvent);
+    }
+
+    @KafkaListener(topics = "decrement_rollback")
+    private void doIncrementRollback(TransactionEvent transactionEvent) {
+        addBalance(BalanceRequest.builder().id(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
+        kafkaTemplate.send("payment_failed", transactionEvent);
     }
 
     @Override

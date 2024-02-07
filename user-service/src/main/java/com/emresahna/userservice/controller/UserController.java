@@ -7,6 +7,7 @@ import com.emresahna.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.emresahna.userservice.dto.UserNotificationInfo;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,5 +33,10 @@ public class UserController {
     @GetMapping("/get-user-email/{userId}")
     public String getUserEmail(@PathVariable String userId){
         return userService.getUserEmail(userId);
+    }
+
+    @GetMapping("/get-user-notification-info/{id}")
+    public UserNotificationInfo getUserNotificationInfoById(@PathVariable String id) {
+        return userService.getUserNotificationInfoById(id);
     }
 }

@@ -71,6 +71,7 @@ public class WalletServiceImpl implements WalletService {
         }
 
         kafkaTemplate.send("payment_success", transactionEvent);
+        kafkaTemplate.send("notify_users", transactionEvent);
     }
 
     @KafkaListener(topics = "decrement_rollback")

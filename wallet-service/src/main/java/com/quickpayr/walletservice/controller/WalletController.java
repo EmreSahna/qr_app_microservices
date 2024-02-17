@@ -1,9 +1,10 @@
-package com.emresahna.walletservice.controller;
+package com.quickpayr.walletservice.controller;
 
-import com.emresahna.walletservice.dto.BalanceRequest;
-import com.emresahna.walletservice.dto.CreateWalletRequest;
-import com.emresahna.walletservice.entity.Wallet;
-import com.emresahna.walletservice.service.WalletService;
+import com.quickpayr.walletservice.dto.BalanceRequest;
+import com.quickpayr.walletservice.dto.CreateWalletRequest;
+import com.quickpayr.walletservice.entity.Wallet;
+import com.quickpayr.walletservice.service.WalletService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class WalletController {
     private final WalletService walletService;
 
     @PostMapping
-    public ResponseEntity<Wallet> createWallet(@RequestBody CreateWalletRequest createWalletRequest) {
+    public ResponseEntity<Wallet> createWallet(@Valid @RequestBody CreateWalletRequest createWalletRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(walletService.createWallet(createWalletRequest));
     }
 
@@ -28,12 +29,12 @@ public class WalletController {
     }
 
     @PostMapping("/add-balance")
-    public ResponseEntity<Wallet> addBalance(@RequestBody BalanceRequest balanceRequest) {
+    public ResponseEntity<Wallet> addBalance(@Valid @RequestBody BalanceRequest balanceRequest) {
         return ResponseEntity.ok(walletService.addBalance(balanceRequest));
     }
 
     @PostMapping("/decrement-balance")
-    public ResponseEntity<Wallet> decrementBalance(@RequestBody BalanceRequest balanceRequest) {
+    public ResponseEntity<Wallet> decrementBalance(@Valid @RequestBody BalanceRequest balanceRequest) {
         return ResponseEntity.ok(walletService.decrementBalance(balanceRequest));
     }
 

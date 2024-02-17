@@ -1,4 +1,4 @@
-package com.emresahna.walletservice;
+package com.quickpayr.walletservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

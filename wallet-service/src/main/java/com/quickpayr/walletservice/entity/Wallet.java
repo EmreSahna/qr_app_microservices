@@ -1,4 +1,4 @@
-package com.emresahna.walletservice.entity;
+package com.quickpayr.walletservice.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

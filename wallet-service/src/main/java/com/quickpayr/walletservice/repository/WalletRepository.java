@@ -1,6 +1,6 @@
-package com.emresahna.walletservice.repository;
+package com.quickpayr.walletservice.repository;
 
-import com.emresahna.walletservice.entity.Wallet;
+import com.quickpayr.walletservice.entity.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

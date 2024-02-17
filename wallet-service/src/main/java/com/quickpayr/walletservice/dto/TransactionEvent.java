@@ -1,4 +1,4 @@
-package com.emresahna.walletservice.dto;
+package com.quickpayr.walletservice.dto;
 
 import lombok.Data;
 

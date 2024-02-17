@@ -1,4 +1,4 @@
-package com.emresahna.walletservice.util;
+package com.quickpayr.walletservice.util;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;

@@ -1,8 +1,8 @@
-package com.emresahna.walletservice.service;
+package com.quickpayr.walletservice.service;
 
-import com.emresahna.walletservice.dto.BalanceRequest;
-import com.emresahna.walletservice.dto.CreateWalletRequest;
-import com.emresahna.walletservice.entity.Wallet;
+import com.quickpayr.walletservice.dto.BalanceRequest;
+import com.quickpayr.walletservice.dto.CreateWalletRequest;
+import com.quickpayr.walletservice.entity.Wallet;
 
 public interface WalletService {
     Wallet createWallet(CreateWalletRequest createWalletRequest);

@@ -1,4 +1,4 @@
-package com.emresahna.walletservice.dto;
+package com.quickpayr.walletservice.dto;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;

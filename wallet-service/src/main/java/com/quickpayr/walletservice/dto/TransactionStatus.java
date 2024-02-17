@@ -1,4 +1,4 @@
-package com.emresahna.walletservice.dto;
+package com.quickpayr.walletservice.dto;
 
 public enum TransactionStatus {
     PENDING,

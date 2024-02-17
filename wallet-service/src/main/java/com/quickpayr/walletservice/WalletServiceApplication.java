@@ -1,4 +1,4 @@
-package com.emresahna.walletservice;
+package com.quickpayr.walletservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

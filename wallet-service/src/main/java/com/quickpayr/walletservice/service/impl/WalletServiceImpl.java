@@ -1,13 +1,13 @@
-package com.emresahna.walletservice.service.impl;
+package com.quickpayr.walletservice.service.impl;
 
-import com.emresahna.walletservice.dto.BalanceRequest;
-import com.emresahna.walletservice.dto.CreateWalletRequest;
-import com.emresahna.walletservice.dto.TransactionEvent;
-import com.emresahna.walletservice.entity.Wallet;
-import com.emresahna.walletservice.exception.WalletNotFoundException;
-import com.emresahna.walletservice.repository.WalletRepository;
-import com.emresahna.walletservice.service.WalletService;
-import com.emresahna.walletservice.util.GenerateQRCode;
+import com.quickpayr.walletservice.dto.BalanceRequest;
+import com.quickpayr.walletservice.dto.CreateWalletRequest;
+import com.quickpayr.walletservice.dto.TransactionEvent;
+import com.quickpayr.walletservice.entity.Wallet;
+import com.quickpayr.walletservice.exception.WalletNotFoundException;
+import com.quickpayr.walletservice.repository.WalletRepository;
+import com.quickpayr.walletservice.service.WalletService;
+import com.quickpayr.walletservice.util.GenerateQRCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -31,7 +31,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet addBalance(BalanceRequest balanceRequest) {
-        Wallet wallet = getWalletByUserId(balanceRequest.getId());
+        Wallet wallet = getWalletByUserId(balanceRequest.getUserId());
 
         wallet.setBalance(wallet.getBalance().add(balanceRequest.getAmount()));
         return walletRepository.save(wallet);
@@ -39,7 +39,7 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Wallet decrementBalance(BalanceRequest balanceRequest) {
-        Wallet wallet = getWalletByUserId(balanceRequest.getId());
+        Wallet wallet = getWalletByUserId(balanceRequest.getUserId());
 
         if(wallet.getBalance().compareTo(balanceRequest.getAmount()) < 0) {
             throw new IllegalArgumentException("Balance is not enough");
@@ -49,10 +49,10 @@ public class WalletServiceImpl implements WalletService {
         return walletRepository.save(wallet);
     }
 
-    @KafkaListener(topics = "product_availability_success")
+    @KafkaListener(id = "product-availability-success-listener", topics = "product_availability_success")
     private void doDecrement(TransactionEvent transactionEvent) {
         try {
-            decrementBalance(BalanceRequest.builder().id(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
+            decrementBalance(BalanceRequest.builder().userId(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
         }catch (IllegalArgumentException | WalletNotFoundException e){
             kafkaTemplate.send("payment_failed", transactionEvent);
             return;
@@ -61,10 +61,10 @@ public class WalletServiceImpl implements WalletService {
         kafkaTemplate.send("decrement_success", transactionEvent);
     }
 
-    @KafkaListener(topics = "decrement_success")
+    @KafkaListener(id = "balance_decrement-listener", topics = "decrement_success")
     private void doIncrement(TransactionEvent transactionEvent) {
         try {
-            addBalance(BalanceRequest.builder().id(transactionEvent.getSellerId()).amount(transactionEvent.getAmount()).build());
+            addBalance(BalanceRequest.builder().userId(transactionEvent.getSellerId()).amount(transactionEvent.getAmount()).build());
         }catch (IllegalArgumentException | WalletNotFoundException e){
             kafkaTemplate.send("decrement_rollback", transactionEvent);
             return;
@@ -74,9 +74,9 @@ public class WalletServiceImpl implements WalletService {
         kafkaTemplate.send("notify_users", transactionEvent);
     }
 
-    @KafkaListener(topics = "decrement_rollback")
+    @KafkaListener(id = "balance_rollback-listener",topics = "decrement_rollback")
     private void doIncrementRollback(TransactionEvent transactionEvent) {
-        addBalance(BalanceRequest.builder().id(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
+        addBalance(BalanceRequest.builder().userId(transactionEvent.getCustomerId()).amount(transactionEvent.getAmount()).build());
         kafkaTemplate.send("payment_failed", transactionEvent);
     }
 

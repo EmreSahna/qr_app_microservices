@@ -1,4 +1,4 @@
-package com.emresahna.walletservice.exception;
+package com.quickpayr.walletservice.exception;
 
 import lombok.Getter;
 

@@ -1,4 +1,12 @@
-# Spring Boot Microservices Application
+# QuickPayr Application
+
+## Purpose of project
+
+---
+
+QuickPayr is an application that aims to perform fast and easy payment transactions between sellers and customers using the QR code payment path. 
+
+# Services
 
 - [User Service](https://github.com/EmreSahna/spring_microservices_qr_app/tree/main/user-service/src/main/java/com/emresahna/userservice)
 - [Wallet Service](https://github.com/EmreSahna/spring_microservices_qr_app/tree/main/wallet-service/src/main/java/com/emresahna/walletservice)
@@ -23,12 +31,28 @@
 
 ![Saga Pattern](/assets/SAGA.png "Saga Pattern")    
 
+## Roadmap
+
+- [x] Github Actions build and pushes to Docker Hub.
+- [x] Implementing SAGA choreography pattern.
+- [x] Product's images stored in AWS S3.
+- [ ] Unit tests.
+- [ ] Change Product Service's database to MongoDB.
+- [ ] Logging.
+- [ ] Exception handling.
+- [ ] Security.
+- [ ] Validation.
+- [ ] Integration with k8s (Kubernetes).
+- [ ] Circuit Breaker implementation.
+
 ## Progress
 
-| Service              | Tests | Exception Handling | Containerize       | Finished | 
-|----------------------|-------|--------------------|--------------------|----------|
-| Wallet Service       | :x:   | :heavy_check_mark: | :heavy_check_mark: | :x:      |
-| Product Service      | :x:   | :x:                | :heavy_check_mark: | :x:      |
-| User Service         | :x:   | :x:                | :heavy_check_mark: | :x:      |
-| Transaction Service  | :x:   | :x:                | :heavy_check_mark: | :x:      |
-| Notification Service | :x:   | :x:                | :heavy_check_mark: | :x:      |
+| Service              | Docker Hub                                                      | Finished | 
+|----------------------|-----------------------------------------------------------------|----------|
+| Api Gateway          | [Link](https://hub.docker.com/r/emresahna/api-gateway)          | :x:      |
+| Eureka Server        | [Link](https://hub.docker.com/r/emresahna/eureka-server)        | :x:      |
+| Wallet Service       | [Link](https://hub.docker.com/r/emresahna/wallet-service)       | :x:      |
+| Product Service      | [Link](https://hub.docker.com/r/emresahna/product-service)      | :x:      |
+| User Service         | [Link](https://hub.docker.com/r/emresahna/user-service)         | :x:      |
+| Transaction Service  | [Link](https://hub.docker.com/r/emresahna/transaction-service)  | :x:      |
+| Notification Service | [Link](https://hub.docker.com/r/emresahna/notification-service) | :x:      |

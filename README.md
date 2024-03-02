@@ -2,8 +2,6 @@
 
 ## Purpose of project
 
----
-
 QuickPayr is an application that aims to perform fast and easy payment transactions between sellers and customers using the QR code payment path. 
 
 # Services
@@ -15,6 +13,7 @@ QuickPayr is an application that aims to perform fast and easy payment transacti
 - [Product Service](https://github.com/EmreSahna/spring_microservices_qr_app/tree/main/product-service/src/main/java/com/emresahna/productservice)
 - [Eureka Service](https://github.com/EmreSahna/spring_microservices_qr_app/tree/main/eureka-server/src/main/java/com/emresahna/eurekaserver)
 - [API Gateway Service](https://github.com/EmreSahna/spring_microservices_qr_app/tree/main/api-gateway/src/main/java/com/emresahna/apigateway)
+- [URL Shortener Service](https://github.com/EmreSahna/spring_microservices_qr_app/tree/main/url-shortener-service/)
 
 ## Technologies
 - Spring Boot
@@ -26,6 +25,9 @@ QuickPayr is an application that aims to perform fast and easy payment transacti
 - Apache Kafka
 - Docker
 - Lombok
+- Fiber
+- MongoDB
+- Redis
 
 ## Saga Pattern
 
@@ -36,6 +38,7 @@ QuickPayr is an application that aims to perform fast and easy payment transacti
 - [x] Github Actions build and pushes to Docker Hub.
 - [x] Implementing SAGA choreography pattern.
 - [x] Product's images stored in AWS S3.
+- [x] Implementing URL Shortener Service.
 - [ ] Unit tests.
 - [ ] Change Product Service's database to MongoDB.
 - [ ] Logging.
@@ -44,6 +47,7 @@ QuickPayr is an application that aims to perform fast and easy payment transacti
 - [ ] Validation.
 - [ ] Integration with k8s (Kubernetes).
 - [ ] Circuit Breaker implementation.
+- [ ] Config Server
 
 ## Progress
 
@@ -56,3 +60,4 @@ QuickPayr is an application that aims to perform fast and easy payment transacti
 | User Service         | [Link](https://hub.docker.com/r/emresahna/user-service)         | :x:      |
 | Transaction Service  | [Link](https://hub.docker.com/r/emresahna/transaction-service)  | :x:      |
 | Notification Service | [Link](https://hub.docker.com/r/emresahna/notification-service) | :x:      |
+| URL Shortener Service| :x:                                                             | :x:      |

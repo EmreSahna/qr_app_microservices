@@ -51,13 +51,13 @@ QuickPayr is an application that aims to perform fast and easy payment transacti
 
 ## Progress
 
-| Service              | Docker Hub                                                      | Finished | 
-|----------------------|-----------------------------------------------------------------|----------|
-| Api Gateway          | [Link](https://hub.docker.com/r/emresahna/api-gateway)          | :x:      |
-| Eureka Server        | [Link](https://hub.docker.com/r/emresahna/eureka-server)        | :x:      |
-| Wallet Service       | [Link](https://hub.docker.com/r/emresahna/wallet-service)       | :x:      |
-| Product Service      | [Link](https://hub.docker.com/r/emresahna/product-service)      | :x:      |
-| User Service         | [Link](https://hub.docker.com/r/emresahna/user-service)         | :x:      |
-| Transaction Service  | [Link](https://hub.docker.com/r/emresahna/transaction-service)  | :x:      |
-| Notification Service | [Link](https://hub.docker.com/r/emresahna/notification-service) | :x:      |
-| URL Shortener Service| :x:                                                             | :x:      |
+| Service              | Docker Hub                                                       | Finished | 
+|----------------------|------------------------------------------------------------------|----------|
+| Api Gateway          | [Link](https://hub.docker.com/r/emresahna/api-gateway)           | :x:      |
+| Eureka Server        | [Link](https://hub.docker.com/r/emresahna/eureka-server)         | :x:      |
+| Wallet Service       | [Link](https://hub.docker.com/r/emresahna/wallet-service)        | :x:      |
+| Product Service      | [Link](https://hub.docker.com/r/emresahna/product-service)       | :x:      |
+| User Service         | [Link](https://hub.docker.com/r/emresahna/user-service)          | :x:      |
+| Transaction Service  | [Link](https://hub.docker.com/r/emresahna/transaction-service)   | :x:      |
+| Notification Service | [Link](https://hub.docker.com/r/emresahna/notification-service)  | :x:      |
+| URL Shortener Service| [Link](https://hub.docker.com/r/emresahna/url-shortener-service) | :x:      |

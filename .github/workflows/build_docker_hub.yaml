@@ -3,14 +3,53 @@ name: Build
 on:
   push:
     branches:
-      - main
+      - test_actions
 
 env:
   REGISTRY: docker.io
   REPO_OWNER: ${{ github.repository_owner }}
 
 jobs:
-  build:
+  go_build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: ["url-shortener-service"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Golang
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.20'
+
+      - name: Build with golang
+        working-directory: ${{ matrix.service }}
+        run: go build -o app
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract image metadata for ${{ matrix.service }}
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.REPO_OWNER }}/${{ matrix.service }}
+
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.service }}
+          file: ${{ matrix.service }}/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  java_build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
